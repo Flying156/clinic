@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.learn.clinic.mapper.PermissionMapper">
+
+    <select id="selectPermission" resultType="com.learn.clinic.dao.entity.PermissionDO">
+            select permission.*
+            from
+                (select * from t_user where t_user.id = #{id})
+            as user left join t_user_role_relation as user_role
+            on user.id = user_role.user_id
+            left join t_role role
+            on user_role.role_id = role.id
+            left join t_role_permission_relation as role_permission
+            on role.id = role_permission.role_id
+            left join t_permission as permission
+            on permission.id = role_permission.permission_id
+    </select>
+</mapper>
