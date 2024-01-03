@@ -7,6 +7,9 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://127.0.0.1:3306/clinic?useUnicode=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+  redis:
+    host: 172.21.133.30
+    password: 123456
 
 
 

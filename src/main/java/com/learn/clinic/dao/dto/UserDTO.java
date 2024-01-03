@@ -1,6 +1,8 @@
 package com.learn.clinic.dao.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 注册用户类
@@ -9,6 +11,8 @@ import lombok.Data;
  * @version 2023/12/27 16:12
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
 
     /**
@@ -21,4 +25,28 @@ public class UserDTO {
      */
     private String password;
 
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 性别
+     */
+    private String gender;
+
+    /**
+     * 账号
+     */
+    private String account;
+
+    /**
+     * 是否可用
+     */
+    private Boolean enabled;
+
+    /**
+     * 角色
+     */
+    private String role;
 }

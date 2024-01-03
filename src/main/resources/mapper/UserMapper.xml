@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.learn.clinic.mapper.UserMapper">
+
+    <resultMap id="userResultMap" type="com.learn.clinic.dao.vo.UserVO">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="role" column="role_name"/>
+        <result property="enabled" column="enabled"/>
+        <result property="account" column="account"/>
+        <result property="gender" column="gender"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+
+    <select id="getUserVO" resultMap="userResultMap">
+        select user.id, user.username, role.role_name, user.enabled, user.gender, user.account, user.avatar
+        from
+        (select * from t_user where username=#{username}) user
+        left join t_user_role_relation user_role
+        on user.id = user_role.user_id
+        left join t_role role
+        on role.id = user_role.role_id
+    </select>
+    <select id="queryList" resultMap="userResultMap">
+        select user.id, user.username, role.role_name, user.enabled, user.gender, user.account, user.avatar
+        from
+            (select * from t_user
+                <if test="username != null and username.length > 0">
+                    <where>
+                        t_user.username like CONCAT('%', #{username}, '%')
+                    </where>
+                </if>) user
+        left join t_user_role_relation user_role
+        on user.id = user_role.user_id
+        left join t_role role
+            on role.id = user_role.role_id
+        limit #{offset}, #{size}
+    </select>
+</mapper>

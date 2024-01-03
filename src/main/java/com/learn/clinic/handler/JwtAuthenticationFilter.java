@@ -41,11 +41,13 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(JwtUtil.HEADER);
-
+        System.out.println(token);
         if (StrUtil.isBlankOrUndefined(token)) {
             filterChain.doFilter(request, response);
             return;
         }
+
+        System.out.println(token);
 
         Claims claims = jwtUtil.getClaimsByToken(token);
         if(claims == null){

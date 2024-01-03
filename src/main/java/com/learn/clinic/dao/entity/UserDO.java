@@ -28,6 +28,16 @@ public class UserDO extends BaseDO {
     private Integer id;
 
     /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
+     * 性别
+     */
+    private String gender;
+
+    /**
      * 用户名
      */
     private String username;

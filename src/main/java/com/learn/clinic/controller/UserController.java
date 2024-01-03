@@ -1,26 +1,14 @@
 package com.learn.clinic.controller;
 
-import cn.hutool.core.map.MapUtil;
-import com.google.code.kaptcha.Producer;
+import com.learn.clinic.dao.dto.PageDTO;
 import com.learn.clinic.dao.dto.UserDTO;
+import com.learn.clinic.dao.vo.UserVO;
 import com.learn.clinic.service.UserService;
 import com.learn.clinic.uitls.Result;
 import com.learn.clinic.uitls.Results;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * 用户
@@ -33,31 +21,43 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-    private final Producer producer;
+
+
+
+
+    @GetMapping("/getAllUser")
+    public Result<PageDTO<UserVO>> getAllUser(@RequestParam(required = false) String username){
+        return Results.success(userService.getAllUser(username));
+    }
+
+    @GetMapping("/userDetail")
+    public Result<UserVO> getUserVO(@RequestParam String username) {
+        return Results.success(userService.getUserVO(username));
+    }
+
+    @PutMapping("/enabledUser")
+    public Result enabledUser(@RequestBody UserDTO userDTO){
+        userService.enabledUser(userDTO);
+        return Results.success();
+    }
+
+    @PutMapping("/editRole")
+    public Result editRole(@RequestBody UserDTO userDTO){
+        userService.editRole(userDTO);
+        return Results.success();
+    }
+
+    @PutMapping("/updateUser")
+    public Result updateUser(@RequestBody UserDTO userDTO){
+        userService.updateUser(userDTO);
+        return Results.success();
+    }
+
 
     @PutMapping("/register")
     public void saveUser(@RequestBody UserDTO userDTO){
         System.out.println(userDTO);
     }
 
-    @GetMapping("/captcha")
-    public Result<Map<String, String>> generateCode() throws IOException {
-        String key = UUID.randomUUID().toString();
-        String code = producer.createText();
 
-        BufferedImage image = producer.createImage(code);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", outputStream);
-
-        BASE64Encoder encoder = new BASE64Encoder();
-        String str = "data:image/jpeg;base64,";
-
-        String base64Img  = str + encoder.encode(outputStream.toByteArray());
-
-        HashMap<String, String> kaptchVoMap = new HashMap<>();
-        kaptchVoMap.put("uuid", key);
-        kaptchVoMap.put("code", base64Img);
-
-        return Results.success(kaptchVoMap);
-    }
 }

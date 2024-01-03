@@ -2,6 +2,7 @@ package com.learn.clinic.handler;
 
 import cn.hutool.core.util.StrUtil;
 import com.learn.clinic.expection.CaptchaException;
+import com.learn.clinic.uitls.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,6 +24,7 @@ import java.io.IOException;
 public class CaptchaFilter extends OncePerRequestFilter {
 
     private final CustomizeAuthenticationFailureHandler failureHandler;
+    private final RedisUtil redisUtil;
 
 
     @Override
@@ -31,11 +33,13 @@ public class CaptchaFilter extends OncePerRequestFilter {
         if("/login".equals(url) && request.getMethod().equals("POST")){
             try{
                 validate(request);
+                filterChain.doFilter(request, response);
             }catch (CaptchaException e){
                 failureHandler.onAuthenticationFailure(request, response, e);
             }
+        }else{
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
 
     /**
@@ -46,17 +50,17 @@ public class CaptchaFilter extends OncePerRequestFilter {
     private void validate(HttpServletRequest request) {
         String code = request.getParameter("code");
         String uuid = request.getParameter("uuid");
-        System.out.println(code);
 
         if(StrUtil.isBlank(code) || StrUtil.isBlank(uuid)){
             throw new CaptchaException("验证码为空");
         }
 
-        if(!code.equals("12345")){
+        String getCode = (String) redisUtil.get("code", uuid);
+        if(!code.equals(getCode)){
             throw new CaptchaException("验证码错误");
-
+        }else {
+            redisUtil.del("code");
         }
-
 
     }
 }
