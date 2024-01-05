@@ -57,6 +57,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             grantedAuthorityList.add(grantedAuthority);
         });
 
+        System.out.println(grantedAuthorityList);
+
 
         return new User(userDO.getAccount(), userDO.getPassword(), userDO.getEnabled(), userDO.getAccountNotExpired(), userDO.getCredentialsNotExpired(), userDO.getAccountNotLocked(), grantedAuthorityList);
     }

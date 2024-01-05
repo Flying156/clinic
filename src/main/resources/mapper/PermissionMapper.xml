@@ -18,4 +18,12 @@
             left join t_permission as permission
             on permission.id = role_permission.permission_id
     </select>
+    <select id="queryPermission" resultType="com.learn.clinic.dao.entity.PermissionDO">
+        select t_permission.*  from
+            (select * from t_request_path where url=#{path}) request_path
+        left join t_request_path_permission_relation
+        on t_request_path_permission_relation.url_id = request_path.id
+        left join t_permission
+        on t_permission.id = t_request_path_permission_relation.permission_id;
+    </select>
 </mapper>

@@ -1,10 +1,13 @@
 package com.learn.clinic.config;
 
 import com.learn.clinic.handler.*;
+import com.learn.clinic.security.CustomizeAccessDecisionManager;
+import com.learn.clinic.security.CustomizeFilterInvocationSecurityMetadataSource;
 import com.learn.clinic.service.Impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -34,6 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomizeSessionInformationExpiredStrategy sessionInformationExpiredStrategy;
     private final CustomizeAccessDeniedHandler accessDeniedHandler;
     private final CaptchaFilter captchaFilter;
+    private final CustomizeAbstractSecurityInterceptor securityInterceptor;
+    private final CustomizeAccessDecisionManager accessDecisionManager;
+    private final CustomizeFilterInvocationSecurityMetadataSource securityMetadataSource;
+
     private static final String[] URL_WHITELIST = {
             "/captcha",
     };
@@ -63,7 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 权限认证
                 .authorizeRequests()
                 .antMatchers(URL_WHITELIST).permitAll()
-                .antMatchers("/getDrug").hasAuthority("manage_drug")
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    @Override
+                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
+                        object.setAccessDecisionManager(accessDecisionManager);
+                        object.setSecurityMetadataSource(securityMetadataSource);
+                        return object;
+                    }
+                })
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
@@ -85,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(jwtAuthenticationFilter())
                 .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
                 // 会话管理
-
+        http.addFilterBefore(securityInterceptor, FilterSecurityInterceptor.class);
     }
 
 }

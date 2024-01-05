@@ -20,4 +20,11 @@ public interface PermissionMapper extends BaseMapper<PermissionDO> {
      */
     List<PermissionDO> selectPermission(Integer id);
 
+    /**
+     * 查询访问接口所需权限
+     *
+     * @param path 接口路径
+     * @return     权限列表
+     */
+    List<PermissionDO> queryPermission(String path);
 }
