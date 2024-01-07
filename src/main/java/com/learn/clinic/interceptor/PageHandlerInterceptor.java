@@ -1,4 +1,4 @@
-package com.learn.clinic.handler;
+package com.learn.clinic.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

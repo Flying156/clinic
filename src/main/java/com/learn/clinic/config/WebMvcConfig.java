@@ -1,6 +1,6 @@
 package com.learn.clinic.config;
 
-import com.learn.clinic.handler.PageHandlerInterceptor;
+import com.learn.clinic.interceptor.PageHandlerInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

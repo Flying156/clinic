@@ -1,6 +1,7 @@
 package com.learn.clinic.config;
 
 import com.learn.clinic.handler.*;
+import com.learn.clinic.interceptor.CustomizeAbstractSecurityInterceptor;
 import com.learn.clinic.security.CustomizeAccessDecisionManager;
 import com.learn.clinic.security.CustomizeFilterInvocationSecurityMetadataSource;
 import com.learn.clinic.service.Impl.UserDetailsServiceImpl;

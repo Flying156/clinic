@@ -2,6 +2,7 @@ package com.learn.clinic.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.learn.clinic.dao.entity.PermissionDO;
+import com.learn.clinic.dao.vo.PermissionRequestVO;
 
 import java.util.List;
 
@@ -27,4 +28,9 @@ public interface PermissionMapper extends BaseMapper<PermissionDO> {
      * @return     权限列表
      */
     List<PermissionDO> queryPermission(String path);
+
+    /**
+     * 获取权限列表和附属的接口列表
+     */
+    List<PermissionRequestVO> queryPermissionList(Integer roleId);
 }

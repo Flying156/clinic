@@ -1,4 +1,4 @@
-package com.learn.clinic.handler;
+package com.learn.clinic.interceptor;
 
 import com.learn.clinic.security.CustomizeAccessDecisionManager;
 import org.springframework.beans.factory.annotation.Autowired;

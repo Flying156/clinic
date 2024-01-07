@@ -64,8 +64,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void enabledUser(UserDTO userDTO) {
         LambdaUpdateWrapper<UserDO> updateWrapper = Wrappers.lambdaUpdate(UserDO.class)
-                .set(UserDO::getEnabled, userDTO.getEnabled());
-        userMapper.update(BeanUtil.toBean(userDTO, UserDO.class), updateWrapper);
+                .set(UserDO::getEnabled, userDTO.getEnabled())
+                .eq(UserDO::getId, userDTO.getUserId());
+        UserDO userDO = UserDO.builder()
+                .id(userDTO.getUserId())
+                .enabled(userDTO.getEnabled())
+                .build();
+
+        userMapper.update(userDO, updateWrapper);
     }
 
     @Override

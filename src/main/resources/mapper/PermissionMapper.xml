@@ -26,4 +26,32 @@
         left join t_permission
         on t_permission.id = t_request_path_permission_relation.permission_id;
     </select>
+
+    <resultMap id="PermissionRequestVOResultMap" type="com.learn.clinic.dao.vo.PermissionRequestVO">
+        <id property="key" column="id" />
+        <result property="title" column="permission_name" />
+        <collection property="children" ofType="com.learn.clinic.dao.vo.RequestPathVO">
+            <id property="key" column="pathId" />
+            <result property="title" column="description" />
+        </collection>
+    </resultMap>
+
+
+    <select id="queryPermissionList" resultMap ="PermissionRequestVOResultMap">
+        select
+            p.id as id,
+            p.permission_name as permission_name,
+            rp.id as pathId,
+            rp.description as description
+        from t_permission p
+                 left join t_request_path_permission_relation rpr
+                           on p.id = rpr.permission_id
+                 left join t_request_path rp
+                           on rpr.url_id = rp.id
+                <if test="roleId != null">
+                    left join t_role_permission_relation
+                        on t_role_permission_relation.permission_id = p.id
+                    where role_id = #{roleId}
+                </if>
+    </select>
 </mapper>

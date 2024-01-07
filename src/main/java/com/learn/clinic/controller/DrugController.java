@@ -2,6 +2,7 @@ package com.learn.clinic.controller;
 
 import com.learn.clinic.dao.dto.PageDTO;
 import com.learn.clinic.dao.entity.DrugDO;
+import com.learn.clinic.expection.ServiceException;
 import com.learn.clinic.service.DrugService;
 import com.learn.clinic.uitls.Result;
 import com.learn.clinic.uitls.Results;
@@ -25,6 +26,13 @@ public class DrugController {
     @GetMapping("/getAllDrug")
     public Result<PageDTO<DrugDO>> getDrug(@RequestParam(required = false) String drugName){
         return Results.success(drugService.queryAllDrug(drugName));
+    }
+
+    @PostMapping("/updateCount")
+    public Result updateCount(@RequestBody List<Integer> idList) throws ServiceException {
+        System.out.println(idList);
+        drugService.updateCount(idList);
+        return Results.success();
     }
 
     @DeleteMapping("/deleteById")

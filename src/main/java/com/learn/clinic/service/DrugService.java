@@ -2,6 +2,7 @@ package com.learn.clinic.service;
 
 import com.learn.clinic.dao.dto.PageDTO;
 import com.learn.clinic.dao.entity.DrugDO;
+import com.learn.clinic.expection.ServiceException;
 
 import java.util.List;
 
@@ -40,4 +41,11 @@ public interface DrugService {
      * @param drugDO 数据
      */
     void addDrug(DrugDO drugDO);
+
+    /**
+     * 更新药品数量
+     *
+     * @param idList 药品 ID 列表
+     */
+    void updateCount(List<Integer> idList) throws ServiceException;
 }

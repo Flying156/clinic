@@ -1,6 +1,7 @@
 package com.learn.clinic.service;
 
 import com.learn.clinic.dao.entity.PermissionDO;
+import com.learn.clinic.dao.vo.PermissionRequestVO;
 
 import java.util.List;
 
@@ -19,4 +20,9 @@ public interface PermissionService {
      * @return     权限列表
      */
     List<PermissionDO>  queryPermission(String path);
+
+    /**
+     * 获取权限列表及附属路径
+     */
+    List<PermissionRequestVO> queryPermissionList(Integer roleId );
 }
