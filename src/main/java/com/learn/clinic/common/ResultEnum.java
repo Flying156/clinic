@@ -41,6 +41,8 @@ public enum ResultEnum {
 
     /* 业务错误 */
     NO_PERMISSION(3001, "没有权限"),
+    OLD_PASSWORD_ERROR(3002, "旧密码错误"),
+    USER_NAME_DUP(3003, "用户名重复"),
 
     /*验证错误*/
     VERIFICATION_CODE_ERROR(4001, "验证码错误");

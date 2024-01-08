@@ -4,6 +4,8 @@ import com.google.code.kaptcha.Producer;
 import com.learn.clinic.uitls.RedisUtil;
 import com.learn.clinic.uitls.Result;
 import com.learn.clinic.uitls.Results;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +26,14 @@ import java.util.concurrent.TimeUnit;
  * @author Milk
  * @version 2024/1/3 10:20
  */
-
+@Tag(name = "验证码")
 @RequiredArgsConstructor
 @RestController
 public class KaptchaController {
 
     private final Producer producer;
     private final RedisUtil redisUtil;
+    @Operation(summary = "发送验证码")
     @GetMapping("/captcha")
     public Result<Map<String, String>> generateCode() throws IOException {
         String key = UUID.randomUUID().toString();

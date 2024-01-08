@@ -1,8 +1,10 @@
 package com.learn.clinic.service;
 
 import com.learn.clinic.dao.dto.PageDTO;
+import com.learn.clinic.dao.dto.PasswordDTO;
 import com.learn.clinic.dao.dto.UserDTO;
 import com.learn.clinic.dao.vo.UserVO;
+import com.learn.clinic.expection.ServiceException;
 
 /**
  * 用户服务层
@@ -24,7 +26,7 @@ public interface UserService {
      *
      * @param userDTO  用户类
      */
-    void updateUser(UserDTO userDTO);
+    void updateUser(UserDTO userDTO) throws ServiceException;
 
     /**
      * 获取所有的用户
@@ -47,4 +49,14 @@ public interface UserService {
      * @param userDTO 信息
      */
     void editRole(UserDTO userDTO);
+
+    /**
+     * 注册用户
+     */
+    void register(UserDTO userDTO) throws ServiceException;
+
+    /**
+     * 修改密码
+     */
+    void editPassword(PasswordDTO passwordDTO) throws ServiceException;
 }

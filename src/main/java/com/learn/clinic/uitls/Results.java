@@ -24,4 +24,7 @@ public class Results {
     public static Result fail(ResultEnum resultEnum) {
         return new Result(false, resultEnum);
     }
+    public static Result fail(String message){
+        return new Result(false, message);
+    }
 }

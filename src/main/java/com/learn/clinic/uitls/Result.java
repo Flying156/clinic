@@ -55,6 +55,12 @@ public class Result<T> {
         this.data = data;
     }
 
+    public Result(boolean flag, String message){
+        this.flag = flag;
+        this.code = flag ? ResultEnum.SUCCESS.getCode() : ResultEnum.COMMON_FAIL.getCode();
+        this.message = message;
+    }
+
     public Result(boolean flag, ResultEnum resultEnum, T data) {
         this.flag = flag;
         this.code = flag ? ResultEnum.SUCCESS.getCode() : (resultEnum == null ? ResultEnum.COMMON_FAIL.getCode() : resultEnum.getCode());

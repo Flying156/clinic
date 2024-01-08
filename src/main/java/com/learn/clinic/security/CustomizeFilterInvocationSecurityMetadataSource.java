@@ -2,7 +2,6 @@ package com.learn.clinic.security;
 
 import cn.hutool.core.collection.CollUtil;
 import com.learn.clinic.dao.entity.PermissionDO;
-import com.learn.clinic.mapper.PermissionMapper;
 import com.learn.clinic.service.PermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
@@ -10,8 +9,8 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,24 +24,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomizeFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    AntPathMatcher antPathMatcher = new AntPathMatcher();
-
     private final PermissionService permissionService;
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
+        int questionMarkIndex = requestUrl.indexOf("?");
+        if (questionMarkIndex != -1) {
+            requestUrl = requestUrl.substring(0, questionMarkIndex);
+        }
         // 查询具体接口权限
         List<PermissionDO> permissionDOList = permissionService.queryPermission(requestUrl);
         // 任意访问
         if(CollUtil.isEmpty(permissionDOList)){
             return null;
         }
-        String [] attributes = new String[permissionDOList.size()];
-        for(int i = 0; i < attributes.length; i++){
-            attributes[i] = permissionDOList.get(i).getPermissionCode();
+        List<ConfigAttribute> attributes = new ArrayList<>();
+        for(PermissionDO permission : permissionDOList){
+            String pattern = permission.getPermissionCode();
+            attributes.add(new SecurityConfig(pattern));
         }
-        return SecurityConfig.createList(attributes);
+        return attributes;
     }
 
     @Override

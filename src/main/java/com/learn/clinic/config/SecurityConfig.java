@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] URL_WHITELIST = {
             "/captcha",
+            "/doc.html"
     };
 
 
